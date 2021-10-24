@@ -1,4 +1,4 @@
-<script>
+<script lang='ts'>
   import { fly, fade } from 'svelte/transition';
   import TodosStatus from './TodosStatus.svelte';
   import FilterButton from './FilterButton.svelte';
@@ -6,14 +6,16 @@
   import NewTodo from './NewTodo.svelte';
   import MoreActions from './MoreActions.svelte';
   import { alert } from '../stores';
+  import type { TodoType } from '../types/todo.type';
+  import { Filter } from '../types/filter.enum';
 
-  export let todos = [];
-  let filter = 'all';
-  let todosStatus;
+  export let todos: TodoType[] = [];
+  let filter: Filter = Filter.ALL;
+  let todosStatus: TodosStatus;
 
   $: newTodoId = todos.length ? Math.max(...todos.map(t => t.id)) + 1 : 1;
 
-  function addTodo(name) {
+  function addTodo(name: string) {
     todos = [
       ...todos,
       {
@@ -25,13 +27,13 @@
     $alert = `Todo '${name}' added`;
   }
 
-  function removeTodo(todo) {
+  function removeTodo(todo: TodoType) {
     todos = todos.filter(t => t.id !== todo.id);
     todosStatus.focus();
     $alert = `Todo '${todo.name}' deleted`;
   }
 
-  function updateTodo(todo) {
+  function updateTodo(todo: TodoType) {
     const i = todos.findIndex(t => t.id === todo.id);
     if (todos[i].name !== todo.name) {
       $alert = `Todo '${todos[i].name}' has been renamed to '${todo.name}'`;
@@ -42,21 +44,22 @@
     todos[i] = { ...todos[i], ...todo };
   }
 
-  const filterTodos = (filter, todos) => {
+  const filterTodos = (filter: Filter, todos: TodoType[]) => {
     switch (filter) {
-      case 'active': {
+      case Filter.ACTIVE: {
         return todos.filter(t => !t.completed);
       }
-      case 'completed': {
+      case Filter.COMPLETED: {
         return todos.filter(t => t.completed);
       }
+      case Filter.ALL:
       default: {
         return todos;
       }
     }
   }
 
-  const checkAllTodos = (completed) => {
+  const checkAllTodos = (completed: boolean) => {
     todos = todos.map(t => ({ ...t, completed: completed }));
     $alert = `${completed ? 'Checked' : 'Unchecked'} ${todos.length} todos`;
   }

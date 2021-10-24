@@ -1,8 +1,9 @@
-<script>
+<script lang='ts'>
   import { createEventDispatcher } from 'svelte';
+  import type { TodoType } from '../types/todo.type';
   const dispatch = createEventDispatcher();
 
-  export let todos;
+  export let todos: TodoType[];
   let completed = true;
 
   const checkAll = () => {
@@ -12,7 +13,8 @@
 
   const removeCompleted = () => dispatch('removeCompleted');
 
-  $: completedTodos = todos.filter(t => t.completed).length;
+  let completedTodos: number;
+  $: completedTodos = todos.filter((t: TodoType) => t.completed).length;
 </script>
 
 <div class="btn-group">

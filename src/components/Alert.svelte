@@ -1,13 +1,13 @@
-<script>
+<script lang='ts'>
   import { alert } from '../stores.js';
   import { onDestroy } from 'svelte';
   import { fly } from 'svelte/transition';
 
   export let ms = 3000;
-  let visible;
-  let timeout;
+  let visible: boolean;
+  let timeout: NodeJS.Timeout;
 
-  const onMessageChange = (message, ms) => {
+  const onMessageChange = (message: string, ms: number) => {
     clearTimeout(timeout);
     if (!message) {
       visible = false;

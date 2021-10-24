@@ -1,12 +1,12 @@
-<script>
+<script lang='ts'>
   import { createEventDispatcher, onMount } from 'svelte';
   import { selectOnFocus } from '../actions';
   const dispatch = createEventDispatcher();
 
-  export let autofocus = false;
+  export let autofocus: boolean = false;
 
   let name = '';
-  let nameEl;
+  let nameEl: HTMLElement;
 
   const addTodo = () => {
     dispatch('addTodo', name);
