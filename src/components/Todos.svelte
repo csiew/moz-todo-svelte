@@ -6,23 +6,21 @@
   import MoreActions from './MoreActions.svelte';
 
   export let todos = [];
-  let newTodoName = '';
   let filter = 'all';
 
   $: totalTodos = todos.length;
   $: completedTodos = todos.filter(todo => todo.completed).length;
   $: newTodoId = totalTodos ? Math.max(...todos.map(t => t.id)) + 1 : 1;
 
-  function addTodo() {
+  function addTodo(name) {
     todos = [
       ...todos,
       {
         id: newTodoId,
-        name: newTodoName,
+        name: name,
         completed: false
       }
     ];
-    newTodoName = '';
   }
 
   function removeTodo(todo) {
@@ -56,7 +54,7 @@
 <div class="todoapp stack-large">
 
   <!-- NewTodo -->
-  <NewTodo bind:newTodoName on:addTodo={e => addTodo(e.detail)} />
+  <NewTodo autofocus on:addTodo={e => addTodo(e.detail)} />
 
   <!-- Filter -->
   <FilterButton bind:filter />
