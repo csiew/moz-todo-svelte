@@ -1,5 +1,6 @@
 <script>
   import { fly, fade } from 'svelte/transition';
+  import TodosStatus from './TodosStatus.svelte';
   import FilterButton from './FilterButton.svelte';
   import Todo from './Todo.svelte';
   import NewTodo from './NewTodo.svelte';
@@ -7,10 +8,9 @@
 
   export let todos = [];
   let filter = 'all';
+  let todosStatus;
 
-  $: totalTodos = todos.length;
-  $: completedTodos = todos.filter(todo => todo.completed).length;
-  $: newTodoId = totalTodos ? Math.max(...todos.map(t => t.id)) + 1 : 1;
+  $: newTodoId = todos.length ? Math.max(...todos.map(t => t.id)) + 1 : 1;
 
   function addTodo(name) {
     todos = [
@@ -25,6 +25,7 @@
 
   function removeTodo(todo) {
     todos = todos.filter(t => t.id !== todo.id);
+    todosStatus.focus();
   }
 
   function updateTodo(todo) {
@@ -60,7 +61,7 @@
   <FilterButton bind:filter />
 
   <!-- TodosStatus -->
-  <h2 id="list-heading">{completedTodos} out of {totalTodos} items completed</h2>
+  <TodosStatus bind:this={todosStatus} {todos} />
 
   <!-- Todos -->
   <ul role="list" class="todo-list stack-large" aria-labelledby="list-heading">
