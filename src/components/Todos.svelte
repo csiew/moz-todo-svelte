@@ -5,6 +5,7 @@
   import Todo from './Todo.svelte';
   import NewTodo from './NewTodo.svelte';
   import MoreActions from './MoreActions.svelte';
+  import { alert } from '../stores';
 
   export let todos = [];
   let filter = 'all';
@@ -21,15 +22,23 @@
         completed: false
       }
     ];
+    $alert = `Todo '${name}' added`;
   }
 
   function removeTodo(todo) {
     todos = todos.filter(t => t.id !== todo.id);
     todosStatus.focus();
+    $alert = `Todo '${todo.name}' deleted`;
   }
 
   function updateTodo(todo) {
     const i = todos.findIndex(t => t.id === todo.id);
+    if (todos[i].name !== todo.name) {
+      $alert = `Todo '${todos[i].name}' has been renamed to '${todo.name}'`;
+    }
+    if (todos[i].completed !== todo.completed) {
+      $alert = `Todo '${todos[i].name}' marked as ${todo.completed ? 'completed' : 'active'}`;
+    }
     todos[i] = { ...todos[i], ...todo };
   }
 
@@ -47,8 +56,25 @@
     }
   }
 
-  const checkAllTodos = (completed) => todos = todos.map(t => ({ ...t, completed: completed }));
-  const removeCompletedTodos = () => todos = todos.filter(t => !t.completed);
+  const checkAllTodos = (completed) => {
+    todos = todos.map(t => ({ ...t, completed: completed }));
+    $alert = `${completed ? 'Checked' : 'Unchecked'} ${todos.length} todos`;
+  }
+
+  const removeCompletedTodos = () => {
+    $alert = `Removed ${todos.filter(t => t.completed).length} todos`;
+    todos = todos.filter(t => !t.completed);
+  }
+
+  $: {
+    if (filter === 'all') {
+      $alert = 'Browsing all todos';
+    } else if (filter === 'active') {
+      $alert = 'Browsing active todos';
+    } else if (filter === 'completed') {
+      $alert = 'Browsing completed todos';
+    }
+  }
 </script>
 
 <!-- Todos.svelte -->

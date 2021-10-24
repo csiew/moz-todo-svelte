@@ -10,8 +10,7 @@
   let name = todo.name;
 
   function update(updatedTodo) {
-    todo = { ...todo, ...updatedTodo };
-    dispatch('update', todo);
+    dispatch('update', { ...todo, ...updatedTodo });
   }
 
   function onCancel() {
