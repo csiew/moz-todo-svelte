@@ -9,4 +9,4 @@ const initialTodos: TodoType[] = [
   { id: 2, name: 'Complete the Svelte Tutorial', completed: false },
 ];
 
-export const todos = localStore('mdn-svelte-todo', initialTodos);
+export const todos = localStore<TodoType[]>('mdn-svelte-todo', initialTodos);
