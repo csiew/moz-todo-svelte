@@ -2,7 +2,9 @@
 	import Alert from './components/Alert.svelte';
 	import Todos from './components/Todos.svelte';
 
-	let todos = [
+	import { todos } from './stores';
+
+	$todos = [
     {
       id: 1,
       name: 'Create a Svelte starter app',
@@ -23,5 +25,5 @@
 
 <main>
 	<Alert />
-	<Todos {todos} />
+	<Todos bind:todos={$todos} />
 </main>
